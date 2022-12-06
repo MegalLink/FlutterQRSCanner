@@ -5,7 +5,7 @@ class MapsHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('maps history'),
     );
   }
