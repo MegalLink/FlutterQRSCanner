@@ -6,13 +6,14 @@ import 'package:qr_reader/providers/db_provider.dart';
 class ScanListProvider extends ChangeNotifier {
   List<ScanModel> scans = [];
 
-  newScan(String scanValue) async {
+  Future<ScanModel> newScan(String scanValue) async {
     final newScan = ScanModel(value: scanValue);
     final id = await DBProvider.db.insertNewScan(newScan);
     newScan.id = id;
     ScanTypeEnum scanType =
         ScanTypeEnum.values.firstWhere((e) => e.value == newScan.type);
     getScansByType(scanType);
+    return newScan;
   }
 
   getAllScans() async {

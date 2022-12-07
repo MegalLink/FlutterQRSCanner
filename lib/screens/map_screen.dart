@@ -8,7 +8,7 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final scan = ModalRoute.of(context)!.settings.arguments as ScanModel;
     return Scaffold(
-      appBar: AppBar(title: Text('Map')),
+      appBar: AppBar(title: const Text('Map')),
       body: Center(child: Text(scan.value)),
     );
   }
