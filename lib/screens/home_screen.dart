@@ -34,9 +34,9 @@ class _HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final uiProvider = Provider.of<UIProvider>(context);
     final currentIndex = uiProvider.selectedMenuOpt;
-    final tempScan = ScanModel(value: 'http://google.com');
-    // TODO: TEMP ERASE THIS LATER
-    final res = DBProvider.db.insertNewScan(tempScan);
+
+    final res = DBProvider.db.getAllScans();
+
 
     switch (currentIndex) {
       case 0:
