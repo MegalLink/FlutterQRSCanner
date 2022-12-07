@@ -13,29 +13,60 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  MapType mapType = MapType.normal;
 
   @override
   Widget build(BuildContext context) {
     final scan = ModalRoute.of(context)!.settings.arguments as ScanModel;
+    final latLng = scan.getLatLng();
+
+    final CameraPosition initialCamera = CameraPosition(
+      target: latLng,
+      zoom: 17.0,
+      tilt: 50,
+    );
+
+    //Markers
+    Set<Marker> markers = <Marker>{};
+    markers.add(
+        Marker(markerId: const MarkerId('geo-location'), position: latLng));
+
     return Scaffold(
-        appBar: AppBar(title: const Text('Map')),
-        body: GoogleMap(
-          mapType: MapType.hybrid,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-        ));
+      appBar: AppBar(
+        title: const Text('Map'),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                _goToCameraPosition(initialCamera);
+              },
+              icon: const Icon(Icons.location_disabled))
+        ],
+      ),
+      body: GoogleMap(
+        mapType: mapType,
+        initialCameraPosition: initialCamera,
+        markers: markers,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (mapType == MapType.normal) {
+            mapType = MapType.satellite;
+          } else {
+            mapType = MapType.normal;
+          }
+          setState(() {}); // redibuja el widget cuando se cambio la propiedad
+        },
+        child: const Icon(Icons.layers),
+      ),
+    );
+  }
+
+  Future<void> _goToCameraPosition(CameraPosition position) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(position));
   }
 }
