@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_reader/models/scan_model.dart';
-import 'package:qr_reader/providers/db_provider.dart';
+import 'package:qr_reader/constants/scan_type_enum.dart';
+import 'package:qr_reader/providers/scan_list_provider.dart';
 import 'package:qr_reader/providers/ui_provider.dart';
 import 'package:qr_reader/widgets/widgets.dart';
 
@@ -35,13 +35,15 @@ class _HomePageBody extends StatelessWidget {
     final uiProvider = Provider.of<UIProvider>(context);
     final currentIndex = uiProvider.selectedMenuOpt;
 
-    final res = DBProvider.db.getAllScans();
-
+    final scanListProvider = Provider.of<ScanListProvider>(context,
+        listen: false); //para que no se redibuje el widget aqui
 
     switch (currentIndex) {
       case 0:
+        scanListProvider.getScansByType(ScanTypeEnum.geo);
         return const MapsHistoryScreen();
       case 1:
+        scanListProvider.getScansByType(ScanTypeEnum.http);
         return const DirectionsScreen();
 
       default:

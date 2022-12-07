@@ -33,16 +33,18 @@ class DBProvider {
     })); // change version every time we change db structure
   }
 
+  /// Inserts record in database a returns its index.
   Future<int> insertNewScan(ScanModel newScan) async {
     final db = await database;
     return await db.insert(_scanTableName, newScan.toMap());
   }
-  
+
   Future<ScanModel> getScanByID(int id) async {
     final db = await database;
-    final res = await db.query(_scanTableName,where: 'id = ?',whereArgs: [id]);
+    final res =
+        await db.query(_scanTableName, where: 'id = ?', whereArgs: [id]);
 
-    if (res.isNotEmpty){
+    if (res.isNotEmpty) {
       return ScanModel.fromMap(res.first);
     }
 
@@ -51,29 +53,43 @@ class DBProvider {
 
   Future<List<ScanModel>> getScansByType(String type) async {
     final db = await database;
-    final res = await db.query(_scanTableName,where: 'type = ?',whereArgs: [type]);
+    final res =
+        await db.query(_scanTableName, where: 'type = ?', whereArgs: [type]);
 
-    if (res.isNotEmpty){
+    if (res.isNotEmpty) {
       return res.map((scan) => ScanModel.fromMap(scan)).toList();
     }
 
     return List.empty();
   }
-
 
   Future<List<ScanModel>> getAllScans() async {
     final db = await database;
     final res = await db.query(_scanTableName);
     print(res);
-    if (res.isNotEmpty){
+    if (res.isNotEmpty) {
       return res.map((scan) => ScanModel.fromMap(scan)).toList();
     }
 
     return List.empty();
   }
 
-  Future<int> updateScan(ScanModel newScan) async{
+  /// Updates record in database and returns its index.
+  Future<int> updateScan(ScanModel newScan) async {
     final db = await database;
-    return await db.update(_scanTableName, newScan.toMap(),where:'id = ?',whereArgs: [newScan.id]);
+    return await db.update(_scanTableName, newScan.toMap(),
+        where: 'id = ?', whereArgs: [newScan.id]);
+  }
+
+  /// Deletes record in database a returns its index.
+  Future<int> deleteScan(int id) async {
+    final db = await database;
+    return await db.delete(_scanTableName, where: 'id = ?', whereArgs: [id]);
+  }
+
+  /// Deletes all records in database and returns the number of elements deleted
+  Future<int> deleteAllScans() async {
+    final db = await database;
+    return await db.delete(_scanTableName);
   }
 }

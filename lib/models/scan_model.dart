@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:qr_reader/constants/scan_type_enum.dart';
+
 class ScanModel {
   int? id;
   String? type;
@@ -10,10 +12,10 @@ class ScanModel {
     this.type,
     required this.value,
   }) {
-    if (value.contains('http')) {
-      type = 'http';
+    if (value.contains(ScanTypeEnum.http.value)) {
+      type = ScanTypeEnum.http.value;
     } else {
-      type = 'geo';
+      type = ScanTypeEnum.geo.value;
     }
   }
 
