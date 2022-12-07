@@ -16,7 +16,13 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Historial'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.delete_forever))
+          IconButton(
+              onPressed: () {
+                final scanListProvider =
+                    Provider.of<ScanListProvider>(context, listen: false);
+                scanListProvider.deleteAllScans();
+              },
+              icon: const Icon(Icons.delete_forever))
         ],
       ),
       body: const _HomePageBody(),

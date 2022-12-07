@@ -5,7 +5,7 @@ import 'package:qr_reader/models/scan_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
-  static final _scanTableName = 'Scans';
+  static const _scanTableName = 'Scans';
   static final DBProvider db = DBProvider._();
   DBProvider._();
 
@@ -66,7 +66,6 @@ class DBProvider {
   Future<List<ScanModel>> getAllScans() async {
     final db = await database;
     final res = await db.query(_scanTableName);
-    print(res);
     if (res.isNotEmpty) {
       return res.map((scan) => ScanModel.fromMap(scan)).toList();
     }
