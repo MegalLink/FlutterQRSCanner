@@ -8,6 +8,7 @@ import 'package:qr_reader/widgets/widgets.dart';
 import 'screens.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const routerScreenName = "home";
   const HomeScreen({super.key});
 
   @override
@@ -26,6 +27,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: const _HomePageBody(),
+      drawer: const SideMenu(),
       bottomNavigationBar: const CustomNavigationBar(),
       floatingActionButton: const CustomActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

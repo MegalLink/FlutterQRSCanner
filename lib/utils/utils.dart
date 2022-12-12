@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:qr_reader/constants/scan_type_enum.dart';
 import 'package:qr_reader/models/scan_model.dart';
+import 'package:qr_reader/screens/map_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> launchURL(BuildContext context, ScanModel scan) async {
@@ -10,6 +11,6 @@ Future<void> launchURL(BuildContext context, ScanModel scan) async {
       throw 'Could not launch $url';
     }
   } else {
-    Navigator.pushNamed(context, 'map', arguments: scan);
+    Navigator.pushNamed(context, MapScreen.routerScreenName, arguments: scan);
   }
 }

@@ -5,6 +5,7 @@ import '../models/scan_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
+  static const routerScreenName = "maps";
   const MapScreen({super.key});
 
   @override
@@ -12,7 +13,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   MapType mapType = MapType.normal;
 
   @override

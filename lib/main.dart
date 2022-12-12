@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_reader/preferences/preferences.dart';
 import 'package:qr_reader/providers/scan_list_provider.dart';
+import 'package:qr_reader/providers/theme_provider.dart';
 import 'package:qr_reader/providers/ui_provider.dart';
 import 'package:qr_reader/screens/screens.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Preferences.init();
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => UIProvider()),
+    ChangeNotifierProvider(create: (_) => ScanListProvider()),
+    ChangeNotifierProvider(
+        create: (_) => ThemeProvider(
+            isDarkMode: Preferences.isDarkMode, hexColor: Preferences.color))
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UIProvider()),
-        ChangeNotifierProvider(create: (_) => ScanListProvider())
-      ],
-      child: MaterialApp(
-        title: 'QR reader',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.deepPurple,
-        ),
-        initialRoute: 'home',
-        routes: {
-          'home': (_) => const HomeScreen(),
-          'map': (_) => const MapScreen()
-        },
+    final theme = Provider.of<ThemeProvider>(context);
+
+    return MaterialApp(
+      title: 'QR reader',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: theme.color,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: theme.color,
+      ),
+      themeMode: theme.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      initialRoute: HomeScreen.routerScreenName,
+      routes: {
+        HomeScreen.routerScreenName: (_) => const HomeScreen(),
+        MapScreen.routerScreenName: (_) => const MapScreen(),
+        SettingsScreen.routerScreenName: (_) => const SettingsScreen(),
+      },
     );
   }
 }
